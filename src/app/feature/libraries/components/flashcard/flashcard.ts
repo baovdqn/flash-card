@@ -1,5 +1,20 @@
 import { Component, computed, signal } from '@angular/core';
 import { BaseComponent } from '../base.component';
+import { FlashCard } from '../../../stores/models';
+
+const EMPTY_CARD: FlashCard = {
+  id: '',
+  name: '',
+  phonetic: '',
+  meaning: '',
+  type: '',
+  example: '',
+  pronunciation: '',
+  imageUrl: '',
+  isKnown: false,
+  createdAt: '',
+  updatedAt: '',
+};
 
 @Component({
   selector: 'app-flashcard',
@@ -7,23 +22,18 @@ import { BaseComponent } from '../base.component';
   styleUrls: ['./flashcard.scss'],
 })
 export class FlashcardComponent extends BaseComponent {
-  listFlashcards = this.store.folderSelected()?.flashCards || [];
-  indexCurrentCard = signal(0);
-  currentCard = signal(this.listFlashcards[0] || null);
+  private readonly initialCards = this.store.folderSelected()?.flashCards ?? [];
+  listFlashcards = signal<FlashCard[]>([...this.initialCards]);
 
-  nextCard = computed(() => {
-    const nextIndex = this.indexCurrentCard() + 1;
-    if (nextIndex < this.listFlashcards.length) {
-      return this.listFlashcards[nextIndex];
-    }
-    return null;
-  });
+  currentCard = computed<FlashCard>(() => this.listFlashcards()[0] ?? EMPTY_CARD);
 
   isFlipped = false;
   dragX = signal(0);
   isDragging = signal(false);
 
   private readonly swipeThreshold = 110;
+  private readonly swipeOutDistance = 400;
+  private readonly swipeOutDurationMs = 450;
   private pointerStartX: number | null = null;
   private pointerStartY: number | null = null;
 
@@ -56,7 +66,7 @@ export class FlashcardComponent extends BaseComponent {
   }
 
   playPronunciation(event?: Event): void {
-    const word = this.currentCard()?.name || '';
+    const word = this.currentCard().name || '';
     if (!word) return;
     event?.stopPropagation();
     if ('speechSynthesis' in window) {
@@ -76,11 +86,11 @@ export class FlashcardComponent extends BaseComponent {
   }
 
   handleStillLearning(): void {
-    this.handleNextCard();
+    this.animateAndApplyAction('left');
   }
 
   handleGotIt(): void {
-    this.handleNextCard();
+    this.animateAndApplyAction('right');
   }
 
   onPointerDown(event: PointerEvent): void {
@@ -120,18 +130,14 @@ export class FlashcardComponent extends BaseComponent {
       return;
     }
 
-    const toRight = dx > 0;
+    const direction: 'left' | 'right' = dx > 0 ? 'right' : 'left';
     this.suppressClick = true;
-    this.dragX.set(toRight ? 520 : -520);
+    this.dragX.set(direction === 'right' ? this.swipeOutDistance : -this.swipeOutDistance);
 
     window.setTimeout(() => {
-      if (toRight) {
-        this.handleGotIt();
-      } else {
-        this.handleStillLearning();
-      }
+      this.applyAction(direction);
       this.dragX.set(0);
-    }, 180);
+    }, this.swipeOutDurationMs);
   }
 
   onPointerCancel(): void {
@@ -141,16 +147,58 @@ export class FlashcardComponent extends BaseComponent {
     this.dragX.set(0);
   }
 
-  private handleNextCard(): void {
-    const nextCard = this.nextCard();
-    if (!nextCard) return;
-    this.currentCard.set(nextCard);
-    this.indexCurrentCard.update((index) => index + 1);
-    if (this.indexCurrentCard() >= this.listFlashcards.length - 1) {
-      this.indexCurrentCard.set(0);
-      this.currentCard.set(this.listFlashcards[0] || null);
+  private handleStillLearningAction(): void {
+    const cards = this.listFlashcards();
+    if (cards.length <= 1) {
+      this.resetFlashcardState();
+      return;
     }
+
+    const [current, ...rest] = cards;
+    this.listFlashcards.set([...rest, current]);
+    this.resetFlashcardState();
+  }
+
+  private handleGotItAction(): void {
+    const cards = this.listFlashcards();
+    if (cards.length === 0) return;
+
+    const [, ...rest] = cards;
+
+    if (rest.length === 0) {
+      this.listFlashcards.set([...this.initialCards]);
+      this.resetFlashcardState();
+      return;
+    }
+
+    this.listFlashcards.set(rest);
+    this.resetFlashcardState();
+  }
+
+  private resetFlashcardState(): void {
     this.isFlipped = false;
     this.suppressClick = true;
+  }
+
+  private animateAndApplyAction(direction: 'left' | 'right'): void {
+    if (this.listFlashcards().length === 0) return;
+
+    this.isDragging.set(false);
+    this.suppressClick = true;
+    this.dragX.set(direction === 'right' ? this.swipeOutDistance : -this.swipeOutDistance);
+
+    window.setTimeout(() => {
+      this.applyAction(direction);
+      this.dragX.set(0);
+    }, this.swipeOutDurationMs);
+  }
+
+  private applyAction(direction: 'left' | 'right'): void {
+    if (direction === 'right') {
+      this.handleGotItAction();
+      return;
+    }
+
+    this.handleStillLearningAction();
   }
 }
