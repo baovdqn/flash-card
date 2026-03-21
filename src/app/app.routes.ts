@@ -8,10 +8,11 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./libs/dashboard/dashboard').then((c) => c.Dashboard),
+    loadComponent: () => import('./feature/dashboard/dashboard').then((c) => c.Dashboard),
   },
   {
-    path: 'flash-card',
-    loadComponent: () => import('./libs/flash-card/flash-card').then((c) => c.FlashCard),
+    path: 'libraries',
+    loadChildren: () =>
+      import('./feature/libraries/libraries.routes').then((r) => r.routesLibraries),
   },
 ];

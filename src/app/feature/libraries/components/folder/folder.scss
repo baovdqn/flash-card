@@ -1,0 +1,18 @@
+.folder {
+  transition: all 0.4s ease-out;
+
+  &:hover {
+    animation: fadeUp 0.4s ease-out;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

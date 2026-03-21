@@ -1,0 +1,5 @@
+export enum STUDY_PHASE {
+  OVERVIEW,
+  STUDY,
+  PRACTICE,
+}

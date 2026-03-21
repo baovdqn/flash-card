@@ -1,0 +1,106 @@
+<div class="grid gap-3">
+  <div class="w-full max-w-[440px] [perspective:1000px]">
+    <div
+      class="flashcard relative min-h-[280px] cursor-pointer rounded-xl transition-transform duration-500 [transform-style:preserve-3d] [touch-action:pan-y] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+      role="button"
+      tabindex="0"
+      aria-label="Flip flashcard"
+      [attr.aria-pressed]="isFlipped"
+      [style.transform]="cardTransform()"
+      [style.transition]="cardTransition()"
+      (click)="onCardClick()"
+      (pointerdown)="onPointerDown($event)"
+      (pointermove)="onPointerMove($event)"
+      (pointerup)="onPointerUp()"
+      (pointercancel)="onPointerCancel()"
+      (pointerleave)="onPointerCancel()"
+    >
+      <div
+        class="pointer-events-none absolute left-3 top-3 z-20 rounded-md border border-blue-500 bg-blue-50 px-2 py-1 text-xs font-semibold uppercase text-blue-600 [html.dark_&]:bg-blue-900/30 [html.dark_&]:text-blue-300"
+        [style.opacity]="leftSwipeOpacity()"
+      >
+        Still learning
+      </div>
+
+      <div
+        class="pointer-events-none absolute right-3 top-3 z-20 rounded-md border border-green-500 bg-green-50 px-2 py-1 text-xs font-semibold uppercase text-green-600 [html.dark_&]:bg-green-900/30 [html.dark_&]:text-green-300"
+        [style.opacity]="rightSwipeOpacity()"
+      >
+        Got it
+      </div>
+
+      <div
+        class="absolute inset-0 rounded-xl border border-gray-200 bg-white p-5 shadow-sm [backface-visibility:hidden] [html.dark_&]:border-gray-700 [html.dark_&]:bg-gray-900"
+      >
+        <div class="grid place-items-center h-full m-auto">
+          <h3 class="m-0 text-3xl font-bold text-gray-900 [html.dark_&]:text-gray-100">
+            {{ currentCard().name }}
+          </h3>
+          <button
+            type="button"
+            (click)="playPronunciation($event)"
+            class="absolute top-[30px] right-[30px] items-center gap-2 rounded-full border border-blue-500 px-3 py-1.5 text-sm font-semibold text-blue-600 hover:bg-blue-50 [html.dark_&]:border-blue-400 [html.dark_&]:text-blue-300 [html.dark_&]:hover:bg-blue-900/30"
+            aria-label="Play pronunciation"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 -960 960 960"
+              class="h-4 w-4"
+              fill="currentColor"
+            >
+              <path
+                d="M560-131v-82q90-26 145-100t55-167q0-94-55-168t-145-99v-82q124 27 202 125.5T840-480q0 148-78 246.5T560-131ZM160-360v-240h160l200-200v640L320-360H160Zm400 80v-400q55 24 87.5 76.5T680-480q0 71-32.5 123.5T560-280Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="absolute inset-0 rounded-xl border border-gray-200 bg-gray-50 p-5 shadow-sm [backface-visibility:hidden] [transform:rotateY(180deg)] [html.dark_&]:border-gray-700 [html.dark_&]:bg-gray-800"
+      >
+        <div class="mt-4 space-y-3">
+          <div class="rounded-lg border border-gray-200 p-3 [html.dark_&]:border-gray-700">
+            <p
+              class="text-xs font-medium uppercase text-center text-gray-500 [html.dark_&]:text-gray-400"
+            >
+              Meaning
+            </p>
+            <p class="mt-1 text-gray-900 [html.dark_&]:text-gray-100">
+              {{ currentCard().meaning }}
+            </p>
+          </div>
+
+          @if (currentCard().imageUrl) {
+            <div
+              class="overflow-hidden rounded-lg border border-gray-200 [html.dark_&]:border-gray-700"
+            >
+              <img
+                [src]="currentCard().imageUrl"
+                [alt]="(currentCard().name || 'word') + ' image'"
+                class="h-28 w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-between gap-2">
+    <button
+      class="flex-1 rounded-md border border-blue-500 bg-transparent px-3 py-2 text-sm font-semibold text-blue-500 hover:bg-blue-100"
+      (click)="handleStillLearning()"
+    >
+      Still learning
+    </button>
+    <button
+      type="button"
+      class="flex-1 rounded-md border border-green-500 bg-transparent px-3 py-2 text-sm font-semibold text-green-500 hover:bg-green-100"
+      (click)="handleGotIt()"
+    >
+      Got it
+    </button>
+  </div>
+</div>

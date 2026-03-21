@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Header } from './libs/ui/header/header';
+import { Header } from './feature/ui/header/header';
 
 @Component({
   selector: 'app-root',

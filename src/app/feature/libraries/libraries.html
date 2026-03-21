@@ -1,0 +1,25 @@
+<div class="mb-4 border-b border-gray-200 [html.dark_&]:border-gray-700">
+  <nav class="mx-auto w-full max-w-7xl py-3">
+    <ol class="flex flex-wrap items-center gap-2">
+      @for (crumb of breadcrumbs(); let last = $last; track crumb.label) {
+        <li class="flex items-center gap-2">
+          @if (!last) {
+            <button
+              (click)="navigateTo(crumb.url)"
+              class="text-blue-600 hover:text-blue-800 hover:underline [html.dark_&]:text-blue-400 [html.dark_&]:hover:text-blue-300"
+            >
+              {{ crumb.label }}
+            </button>
+            <span class="text-gray-400 [html.dark_&]:text-gray-600">/</span>
+          } @else {
+            <span class="text-gray-700 [html.dark_&]:text-gray-300">
+              {{ crumb.label }}
+            </span>
+          }
+        </li>
+      }
+    </ol>
+  </nav>
+</div>
+
+<router-outlet></router-outlet>

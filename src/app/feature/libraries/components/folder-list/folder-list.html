@@ -1,0 +1,64 @@
+<section class="mx-auto w-full max-w-5xl">
+  <div class="mb-2 flex items-center justify-end gap-4">
+    <div class="flex gap-2" role="group" aria-labelledby="folders-heading">
+      <button
+        type="button"
+        class="rounded border border-blue-600 px-2 py-1 text-sm font-medium text-blue-600 cursor-pointer [html.dark_&]:border-blue-500 [html.dark_&]:text-blue-400 [html.dark_&]:hover:bg-blue-950"
+      >
+        Import Folder
+      </button>
+      <button
+        type="button"
+        class="rounded border border-green-600 px-2 py-1 text-sm font-medium text-green-600 cursor-pointer [html.dark_&]:border-green-500 [html.dark_&]:text-green-400 [html.dark_&]:hover:bg-green-950"
+      >
+        + Create Folder
+      </button>
+    </div>
+  </div>
+
+  <div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+    <h2
+      id="folders-heading"
+      class="text-xl font-semibold text-gray-900 [html.dark_&]:text-gray-100"
+    >
+      Folders
+    </h2>
+  </div>
+
+  <div class="flex flex-col gap-3">
+    @for (folder of folders(); track folder.id) {
+      <div
+        class="folder overflow-hidden rounded-lg border border-gray-200 [html.dark_&]:border-gray-700 hover:cursor-pointer :hover:border-gray-300 [html.dark_&]:hover:border-gray-600"
+        (click)="handleToDetail(folder)"
+      >
+        <div
+          class="flex items-center justify-between border-gray-200 px-4 py-3 [html.dark_&]:border-gray-700"
+        >
+          <div>
+            <h3 class="font-medium text-gray-900 [html.dark_&]:text-gray-100">
+              {{ folder.name }}
+            </h3>
+            <p class="text-sm text-gray-500 [html.dark_&]:text-gray-400">
+              {{ folder.totalWords }} vocabulary words
+            </p>
+            <div class="mt-2 flex items-center gap-2">
+              <div
+                class="h-2 w-full overflow-hidden rounded-full bg-gray-200 [html.dark_&]:bg-gray-600"
+              >
+                <div class="h-full bg-blue-500" [style.width.%]="folder.progress * 100"></div>
+              </div>
+              <div class="flex items-center justify-between mb-1">
+                <p class="text-sm font-medium text-gray-600 [html.dark_&]:text-gray-300">
+                  {{ folder.progress * 100 | number: '1.0-0' }}%
+                </p>
+              </div>
+            </div>
+          </div>
+          <span class="text-xs text-gray-500 [html.dark_&]:text-gray-400">{{
+            folder.updatedAt | date: 'mediumDate'
+          }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</section>

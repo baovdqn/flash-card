@@ -1,0 +1,63 @@
+@switch (studyPhase()) {
+  @case (STUDY_PHASE.OVERVIEW) {
+    <section class="mx-auto w-full max-w-5xl">
+      <div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+        <h2
+          id="folders-heading"
+          class="text-xl font-semibold text-gray-900 [html.dark_&]:text-gray-100"
+        >
+          {{ folderSelected()?.name }}
+        </h2>
+      </div>
+      <div class="flex gap-2 justify-end mb-4">
+        <button
+          type="button"
+          class="inline-flex cursor-pointer items-center gap-2 rounded-md bg-blue-600 px-4 py-1 text-sm font-medium text-white hover:bg-blue-700 [html.dark_&]:bg-blue-700 [html.dark_&]:hover:bg-blue-600"
+          (click)="handleStudy()"
+        >
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"
+            />
+          </svg>
+          Study
+        </button>
+        <button
+          type="button"
+          class="inline-flex cursor-pointer items-center gap-2 rounded-md bg-green-600 px-4 py-1 text-sm font-medium text-white hover:bg-green-700 [html.dark_&]:bg-green-700 [html.dark_&]:hover:bg-green-600"
+          (click)="handleCreate()"
+        >
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Create
+        </button>
+      </div>
+      <div class="flex flex-col gap-3">
+        @for (card of folderSelected()?.flashCards; track card.id) {
+          <app-card [card]="card"></app-card>
+        }
+      </div>
+    </section>
+  }
+  @case (STUDY_PHASE.STUDY) {
+    <app-flashcard></app-flashcard>
+  }
+  @case (STUDY_PHASE.PRACTICE) {
+    PRACTICE
+  }
+}
