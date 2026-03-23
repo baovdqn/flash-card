@@ -10,7 +10,7 @@ export interface Folder {
 }
 
 export interface FlashCard {
-  id: string;
+  id?: string;
   name: string;
   phonetic: string;
   meaning: string;
@@ -19,6 +19,6 @@ export interface FlashCard {
   pronunciation: string;
   imageUrl: string;
   isKnown: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

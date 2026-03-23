@@ -57,3 +57,149 @@
     PRACTICE
   }
 }
+
+@if (isCreateWordModalOpen()) {
+  <app-modal>
+    <ng-container modal-head>
+      <h3 class="text-lg font-semibold text-gray-900 [html.dark_&]:text-gray-100">Create Word</h3>
+    </ng-container>
+
+    <ng-container modal-content>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label
+            for="word-name"
+            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+          >
+            Word *
+          </label>
+          <input
+            id="word-name"
+            type="text"
+            placeholder="Enter word"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+            [class.!border-red-500]="
+              formCreateWord.name().invalid() && formCreateWord.name().touched()
+            "
+            [formField]="formCreateWord.name"
+          />
+          @if (formCreateWord.name().invalid() && formCreateWord.name().touched()) {
+            <p class="mt-1 text-xs text-red-500">Word is required.</p>
+          }
+        </div>
+
+        <div>
+          <label
+            for="word-meaning"
+            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+          >
+            Meaning *
+          </label>
+          <input
+            id="word-meaning"
+            type="text"
+            placeholder="Enter meaning"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+            [class.!border-red-500]="
+              formCreateWord.meaning().invalid() && formCreateWord.meaning().touched()
+            "
+            [formField]="formCreateWord.meaning"
+          />
+          @if (formCreateWord.meaning().invalid() && formCreateWord.meaning().touched()) {
+            <p class="mt-1 text-xs text-red-500">Meaning is required.</p>
+          }
+        </div>
+
+        <div>
+          <label
+            for="word-phonetic"
+            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+          >
+            Phonetic
+          </label>
+          <input
+            id="word-phonetic"
+            type="text"
+            placeholder="/fəˈnɛtɪk/"
+            [formField]="formCreateWord.phonetic"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+            [class.!border-red-500]="
+              formCreateWord.phonetic().invalid() && formCreateWord.phonetic().touched()
+            "
+          />
+        </div>
+
+        <div>
+          <label
+            for="word-type"
+            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+          >
+            Type
+          </label>
+          <input
+            id="word-type"
+            type="text"
+            placeholder="noun, verb..."
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+            [formField]="formCreateWord.type"
+          />
+        </div>
+
+        <div class="sm:col-span-2">
+          <label
+            for="word-example"
+            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+          >
+            Example
+          </label>
+          <textarea
+            id="word-example"
+            rows="3"
+            placeholder="Enter example sentence"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+            [formField]="formCreateWord.example"
+          ></textarea>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label
+            for="word-image"
+            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+          >
+            Image URL
+          </label>
+          <input
+            id="word-image"
+            type="url"
+            placeholder="https://..."
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+            [formField]="formCreateWord.imageUrl"
+          />
+        </div>
+
+        <label class="sm:col-span-2 inline-flex items-center gap-2 text-sm text-gray-700">
+          <input type="checkbox" class="h-4 w-4" />
+          Mark as known
+        </label>
+      </div>
+    </ng-container>
+
+    <ng-container modal-footer>
+      <button
+        type="button"
+        class="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 [html.dark_&]:border-gray-600 [html.dark_&]:text-gray-200 [html.dark_&]:hover:bg-gray-800"
+        (click)="closeCreateWordModal()"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="rounded bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700"
+        (click)="submitCreateWord()"
+      >
+        Create
+      </button>
+    </ng-container>
+  </app-modal>
+}

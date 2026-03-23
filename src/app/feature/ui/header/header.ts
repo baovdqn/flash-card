@@ -8,7 +8,7 @@ import { Menu } from '../menu/menu';
   styleUrl: './header.scss',
 })
 export class Header {
-  isDark = signal(false);
+  isDark = signal(true);
 
   constructor() {
     const hasWindow = typeof window !== 'undefined';
