@@ -5,7 +5,7 @@
       role="button"
       tabindex="0"
       aria-label="Flip flashcard"
-      [attr.aria-pressed]="isFlipped"
+      [attr.aria-pressed]="isFlipped()"
       [style.transform]="cardTransform()"
       [style.transition]="cardTransition()"
       (click)="onCardClick()"

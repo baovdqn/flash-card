@@ -27,7 +27,7 @@ export class FlashcardComponent extends BaseComponent {
 
   currentCard = computed<FlashCard>(() => this.listFlashcards()[0] ?? EMPTY_CARD);
 
-  isFlipped = false;
+  isFlipped = signal(false);
   dragX = signal(0);
   isDragging = signal(false);
 
@@ -42,8 +42,7 @@ export class FlashcardComponent extends BaseComponent {
   cardTransform = computed(() => {
     const x = this.dragX();
     const rotateZ = Math.max(-12, Math.min(12, x / 12));
-    const rotateY = this.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
-
+    const rotateY = this.isFlipped() ? 'rotateY(180deg)' : 'rotateY(0deg)';
     return `translateX(${x}px) rotate(${rotateZ}deg) ${rotateY}`;
   });
 
@@ -62,7 +61,7 @@ export class FlashcardComponent extends BaseComponent {
   });
 
   toggleFlip(): void {
-    this.isFlipped = !this.isFlipped;
+    this.isFlipped.set(!this.isFlipped());
   }
 
   playPronunciation(event?: Event): void {
@@ -176,7 +175,7 @@ export class FlashcardComponent extends BaseComponent {
   }
 
   private resetFlashcardState(): void {
-    this.isFlipped = false;
+    this.isFlipped.set(false);
     this.suppressClick = true;
   }
 
