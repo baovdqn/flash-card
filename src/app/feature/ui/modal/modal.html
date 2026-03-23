@@ -1,0 +1,21 @@
+<div class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+  <div
+    class="modal-panel w-full max-w-2xl overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl [html.dark_&]:border-gray-700 [html.dark_&]:bg-gray-900"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="border-b border-gray-200 px-6 py-4 [html.dark_&]:border-gray-700">
+      <ng-content select="[modal-head]"></ng-content>
+    </div>
+
+    <div class="px-6 py-5 text-sm text-gray-700 [html.dark_&]:text-gray-200">
+      <ng-content select="[modal-content]"></ng-content>
+    </div>
+
+    <div
+      class="flex items-center justify-end gap-2 border-t border-gray-200 px-6 py-4 [html.dark_&]:border-gray-700"
+    >
+      <ng-content select="[modal-footer]"></ng-content>
+    </div>
+  </div>
+</div>
