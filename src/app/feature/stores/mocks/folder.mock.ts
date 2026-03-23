@@ -10,7 +10,7 @@ export const flashCardMock = [
     example: 'Hello! How are you?',
     pronunciation: '',
     imageUrl: '',
-    isKnown: false,
+    isKnown: true,
     createdAt: '2023-01-01T00:00:00Z',
     updatedAt: '2023-01-03T00:00:00Z',
   },

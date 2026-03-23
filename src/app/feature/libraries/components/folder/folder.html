@@ -47,11 +47,7 @@
           Create
         </button>
       </div>
-      <div class="flex flex-col gap-3">
-        @for (card of folderSelected()?.flashCards; track card.id) {
-          <app-card [card]="card"></app-card>
-        }
-      </div>
+      <app-word-list [listWord]="flashCardsOfSelectedFolder()"></app-word-list>
     </section>
   }
   @case (STUDY_PHASE.STUDY) {

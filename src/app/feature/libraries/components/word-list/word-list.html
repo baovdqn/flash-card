@@ -1,0 +1,65 @@
+<div class="overflow-hidden rounded-xl border border-gray-200 [html.dark_&]:border-gray-700">
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200 [html.dark_&]:divide-gray-700">
+      <thead class="bg-gray-50 [html.dark_&]:bg-gray-800">
+        <tr>
+          <th
+            scope="col"
+            class="px-4 py-3 text-left text-xs font-semibold tracking-wide text-gray-600 [html.dark_&]:text-gray-300"
+          >
+            Word
+          </th>
+          <th
+            scope="col"
+            class="px-4 py-3 text-left text-xs font-semibold tracking-wide text-gray-600 [html.dark_&]:text-gray-300"
+          >
+            Meaning
+          </th>
+          <th
+            scope="col"
+            class="px-4 py-3 text-left text-xs font-semibold tracking-wide text-gray-600 [html.dark_&]:text-gray-300"
+          >
+            Known
+          </th>
+        </tr>
+      </thead>
+
+      <tbody
+        class="divide-y divide-gray-100 bg-white [html.dark_&]:divide-gray-700 [html.dark_&]:bg-gray-900"
+      >
+        @if (listWord().length === 0) {
+          <tr>
+            <td
+              colspan="3"
+              class="px-4 py-6 text-center text-sm text-gray-500 [html.dark_&]:text-gray-400"
+            >
+              No words available.
+            </td>
+          </tr>
+        } @else {
+          @for (word of listWord(); track word.id) {
+            <tr class="hover:bg-gray-50 [html.dark_&]:hover:bg-gray-800/70">
+              <td class="px-4 py-3 text-sm font-medium text-gray-900 [html.dark_&]:text-gray-100">
+                {{ word.name }}
+              </td>
+              <td class="px-4 py-3 text-sm text-gray-700 [html.dark_&]:text-gray-300">
+                {{ word.meaning }}
+              </td>
+              <td class="px-4 py-3 text-sm">
+                <span
+                  class="inline-flex rounded-full px-2 py-1 text-xs font-semibold"
+                  [class.bg-green-100]="word.isKnown"
+                  [class.text-green-700]="word.isKnown"
+                  [class.bg-gray-100]="!word.isKnown"
+                  [class.text-gray-700]="!word.isKnown"
+                >
+                  {{ word.isKnown ? 'Yes' : 'No' }}
+                </span>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
