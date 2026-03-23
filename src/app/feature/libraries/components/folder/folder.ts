@@ -20,6 +20,8 @@ export class FolderComponent extends BaseComponent implements OnDestroy {
   STUDY_PHASE = STUDY_PHASE;
   isCreateWordModalOpen = signal(false);
   createWordSubmitted = signal(false);
+  editingWordId = signal<string | null>(null);
+  isEditingWord = computed(() => this.editingWordId() !== null);
 
   wordModel = signal<FlashCard>({
     name: '',
@@ -50,12 +52,14 @@ export class FolderComponent extends BaseComponent implements OnDestroy {
   }
 
   handleCreate(): void {
+    this.editingWordId.set(null);
     this.resetCreateWordForm();
     this.isCreateWordModalOpen.set(true);
   }
 
   closeCreateWordModal(): void {
     this.isCreateWordModalOpen.set(false);
+    this.editingWordId.set(null);
   }
 
   async submitCreateWord(): Promise<void> {
@@ -72,21 +76,43 @@ export class FolderComponent extends BaseComponent implements OnDestroy {
         const now = new Date().toISOString();
         const name = value.name.trim();
 
-        const newWord: FlashCard = {
-          id: this.createId(),
-          name,
-          phonetic: value.phonetic.trim(),
-          meaning: value.meaning.trim(),
-          type: value.type.trim(),
-          example: value.example.trim(),
-          pronunciation: name,
-          imageUrl: value.imageUrl.trim(),
-          isKnown: value.isKnown,
-          createdAt: now,
-          updatedAt: now,
-        };
+        const editingWordId = this.editingWordId();
+        const updatedCards = editingWordId
+          ? folder.flashCards.map((card) => {
+              if (card.id !== editingWordId) {
+                return card;
+              }
 
-        const updatedCards = [newWord, ...folder.flashCards];
+              return {
+                ...card,
+                name,
+                phonetic: value.phonetic.trim(),
+                meaning: value.meaning.trim(),
+                type: value.type.trim(),
+                example: value.example.trim(),
+                pronunciation: name,
+                imageUrl: value.imageUrl.trim(),
+                isKnown: value.isKnown,
+                updatedAt: now,
+              };
+            })
+          : [
+              {
+                id: this.createId(),
+                name,
+                phonetic: value.phonetic.trim(),
+                meaning: value.meaning.trim(),
+                type: value.type.trim(),
+                example: value.example.trim(),
+                pronunciation: name,
+                imageUrl: value.imageUrl.trim(),
+                isKnown: value.isKnown,
+                createdAt: now,
+                updatedAt: now,
+              },
+              ...folder.flashCards,
+            ];
+
         const knownCount = updatedCards.filter((card) => card.isKnown).length;
 
         const updatedFolder: Folder = {
@@ -117,7 +143,51 @@ export class FolderComponent extends BaseComponent implements OnDestroy {
     }
   }
 
-  handleEdit(): void {}
+  handleEdit(word: FlashCard): void {
+    if (!word.id) {
+      return;
+    }
+
+    this.createWordSubmitted.set(false);
+    this.editingWordId.set(word.id);
+    this.wordModel.set({
+      name: word.name,
+      phonetic: word.phonetic,
+      meaning: word.meaning,
+      type: word.type,
+      example: word.example,
+      pronunciation: word.pronunciation,
+      imageUrl: word.imageUrl,
+      isKnown: word.isKnown,
+    });
+    this.isCreateWordModalOpen.set(true);
+  }
+
+  handleDelete(wordId: string): void {
+    const folder = this.folderSelected();
+    if (!folder) {
+      return;
+    }
+
+    const updatedCards = folder.flashCards.filter((card) => card.id !== wordId);
+    const knownCount = updatedCards.filter((card) => card.isKnown).length;
+    const now = new Date().toISOString();
+
+    const updatedFolder: Folder = {
+      ...folder,
+      flashCards: updatedCards,
+      totalWords: updatedCards.length,
+      progress: updatedCards.length ? knownCount / updatedCards.length : 0,
+      updatedAt: now,
+    };
+
+    const updatedFolders = this.store
+      .folders()
+      .map((item) => (item.id === updatedFolder.id ? updatedFolder : item));
+
+    this.store.setFolders(updatedFolders);
+    this.store.setFolderSelected(updatedFolder);
+  }
 
   ngOnDestroy(): void {
     this.store.setFolderSelected(null);

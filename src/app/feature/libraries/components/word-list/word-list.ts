@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FlashCard } from '../../../stores/models';
 
 @Component({
@@ -9,4 +9,18 @@ import { FlashCard } from '../../../stores/models';
 })
 export class WordListComponent {
   listWord = input<FlashCard[]>([]);
+  editWord = output<FlashCard>();
+  deleteWord = output<string>();
+
+  handleEdit(word: FlashCard): void {
+    this.editWord.emit(word);
+  }
+
+  handleDelete(word: FlashCard): void {
+    if (!word.id) {
+      return;
+    }
+
+    this.deleteWord.emit(word.id);
+  }
 }

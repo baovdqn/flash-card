@@ -12,8 +12,9 @@
       <div class="flex gap-2 justify-end mb-4">
         <button
           type="button"
-          class="inline-flex cursor-pointer items-center gap-2 rounded-md bg-blue-600 px-4 py-1 text-sm font-medium text-white hover:bg-blue-700 [html.dark_&]:bg-blue-700 [html.dark_&]:hover:bg-blue-600"
+          class="inline-flex cursor-pointer items-center gap-2 rounded-md bg-blue-600 px-4 py-1 text-sm font-medium text-white hover:bg-blue-700 [html.dark_&]:bg-blue-700 [html.dark_&]:hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400 [html.dark_&]:disabled:bg-gray-600 [html.dark_&]:disabled:hover:bg-gray-600"
           (click)="handleStudy()"
+          [disabled]="!flashCardsOfSelectedFolder() || flashCardsOfSelectedFolder().length === 0"
         >
           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -47,7 +48,11 @@
           Create
         </button>
       </div>
-      <app-word-list [listWord]="flashCardsOfSelectedFolder()"></app-word-list>
+      <app-word-list
+        [listWord]="flashCardsOfSelectedFolder()"
+        (editWord)="handleEdit($event)"
+        (deleteWord)="handleDelete($event)"
+      ></app-word-list>
     </section>
   }
   @case (STUDY_PHASE.STUDY) {
@@ -61,7 +66,9 @@
 @if (isCreateWordModalOpen()) {
   <app-modal>
     <ng-container modal-head>
-      <h3 class="text-lg font-semibold text-gray-900 [html.dark_&]:text-gray-100">Create Word</h3>
+      <h3 class="text-lg font-semibold text-gray-900 [html.dark_&]:text-gray-100">
+        {{ isEditingWord() ? 'Edit Word' : 'Create Word' }}
+      </h3>
     </ng-container>
 
     <ng-container modal-content>
@@ -198,7 +205,7 @@
         class="rounded bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700"
         (click)="submitCreateWord()"
       >
-        Create
+        {{ isEditingWord() ? 'Save' : 'Create' }}
       </button>
     </ng-container>
   </app-modal>

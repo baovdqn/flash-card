@@ -70,7 +70,7 @@ export class FlashcardComponent extends BaseComponent {
     event?.stopPropagation();
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(word);
-      utterance.lang = 'en-UK';
+      utterance.lang = 'en-US';
       window.speechSynthesis.cancel();
       window.speechSynthesis.speak(utterance);
     }

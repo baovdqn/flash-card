@@ -17,9 +17,15 @@
           </th>
           <th
             scope="col"
-            class="px-4 py-3 text-left text-xs font-semibold tracking-wide text-gray-600 [html.dark_&]:text-gray-300"
+            class="hidden px-4 py-3 text-left text-xs font-semibold tracking-wide text-gray-600 [html.dark_&]:text-gray-300 md:table-cell"
           >
             Known
+          </th>
+          <th
+            scope="col"
+            class="px-4 py-3 text-left text-xs font-semibold tracking-wide text-gray-600 [html.dark_&]:text-gray-300"
+          >
+            Action
           </th>
         </tr>
       </thead>
@@ -30,7 +36,7 @@
         @if (listWord().length === 0) {
           <tr>
             <td
-              colspan="3"
+              colspan="4"
               class="px-4 py-6 text-center text-sm text-gray-500 [html.dark_&]:text-gray-400"
             >
               No words available.
@@ -45,7 +51,7 @@
               <td class="px-4 py-3 text-sm text-gray-700 [html.dark_&]:text-gray-300">
                 {{ word.meaning }}
               </td>
-              <td class="px-4 py-3 text-sm">
+              <td class="hidden px-4 py-3 text-sm md:table-cell">
                 <span
                   class="inline-flex rounded-full px-2 py-1 text-xs font-semibold"
                   [class.bg-green-100]="word.isKnown"
@@ -55,6 +61,25 @@
                 >
                   {{ word.isKnown ? 'Yes' : 'No' }}
                 </span>
+              </td>
+              <td class="px-4 py-3 text-sm">
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    class="rounded bg-blue-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                    (click)="handleEdit(word)"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    type="button"
+                    class="rounded bg-red-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-red-700"
+                    (click)="handleDelete(word)"
+                  >
+                    Delete
+                  </button>
+                </div>
               </td>
             </tr>
           }
