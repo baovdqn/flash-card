@@ -1,4 +1,5 @@
 import {
+  getState,
   patchState,
   signalStore,
   withComputed,
@@ -6,9 +7,10 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
+import { inject } from '@angular/core';
 import { Folder } from './models';
-import { folderMock } from './mocks/folder.mock';
 import { STUDY_PHASE } from './models/enums';
+import { IndexedDbService } from '../services/indexeddb.service';
 
 interface FolderState {
   folders: Folder[];
@@ -27,13 +29,15 @@ export const FolderStore = signalStore(
   withComputed((store) => ({
     flashCardsOfSelectedFolder: () => store.folderSelected()?.flashCards ?? [],
   })),
-  withMethods((store) => ({
+  withMethods((store, indexedDb = inject(IndexedDbService)) => ({
     setStateToDefault(): void {
       patchState(store, initState);
     },
 
     setFolders(folders: Folder[]): void {
       patchState(store, (state) => ({ ...state, folders }));
+
+      void indexedDb.saveFolders(folders);
     },
 
     setFolderSelected(folderSelected: Folder | null): void {
@@ -48,9 +52,18 @@ export const FolderStore = signalStore(
   })),
   withHooks({
     onInit: (store) => {
-      const mock: Folder[] = folderMock;
-      patchState(store, { folders: mock });
-      console.log('FolderStore initialized with mock data', store.folders());
+      const indexedDb = inject(IndexedDbService);
+
+      void (async () => {
+        const folders = await indexedDb.getFolders();
+        patchState(store, { folders });
+
+        const selectedId = getState(store).folderSelected?.id;
+        if (selectedId) {
+          const selected = folders.find((folder) => folder.id === selectedId) ?? null;
+          patchState(store, { folderSelected: selected });
+        }
+      })();
     },
   }),
 );
