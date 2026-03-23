@@ -1,59 +1,78 @@
-# FlashCard
+# Flash Card
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
+Flash Card is an Angular 21 application for learning English vocabulary with folders and flashcards.
 
-## Development server
+## Overview
 
-To start a local development server, run:
+The app helps users:
 
-```bash
-ng serve
-```
+- Browse vocabulary folders in the Libraries section
+- Open a folder to view all words in a table (Word, Meaning, Know)
+- Study words with flashcard mode
+- Track learning progress per folder
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Current data is loaded from local mock data in the store.
 
-## Code scaffolding
+## Tech Stack
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Angular 21 (standalone components)
+- TypeScript
+- SCSS
+- Tailwind CSS 4
+- NgRx Signals (`@ngrx/signals`) for state management
 
-```bash
-ng generate component component-name
-```
+## Main Features
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Folder list with progress bar
+- Folder detail page
+- Word list table with known/unknown status
+- Flashcard study UI with pronunciation via browser SpeechSynthesis
+- Breadcrumb navigation in Libraries
 
-```bash
-ng generate --help
-```
+## Project Structure (important folders)
 
-## Building
+- `src/app/feature/dashboard`: Dashboard screen
+- `src/app/feature/libraries`: Libraries feature and routing
+- `src/app/feature/libraries/components`: UI components (folder list, word list, flashcard, ...)
+- `src/app/feature/stores`: Signal store, models, and mock data
 
-To build the project run:
+## Getting Started
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### 1. Install dependencies
 
 ```bash
-ng e2e
+npm install
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### 2. Run development server
 
-## Additional Resources
+```bash
+npm start
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Open http://localhost:4200.
+
+### 3. Build production
+
+```bash
+npm run build
+```
+
+### 4. Run tests
+
+```bash
+npm test
+```
+
+## Scripts
+
+- `npm start`: Start dev server
+- `npm run build`: Build app
+- `npm run watch`: Build in watch mode
+- `npm test`: Run unit tests
+
+## Notes
+
+- Store initialization currently uses mock data from `src/app/feature/stores/mocks/folder.mock.ts`.
+- `FolderStore` handles folder selection and study phase state.
+- Firebase is included in dependencies and can be integrated later for real backend data.
