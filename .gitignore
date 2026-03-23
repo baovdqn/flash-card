@@ -42,3 +42,13 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Firebase cache
+.firebase/
+
+# Logs
+firebase-debug.log
+firebase-debug.*.log
+
+# Local env
+.env
