@@ -1,1 +1,1 @@
-export * from './folder.model';
+export * from './models';

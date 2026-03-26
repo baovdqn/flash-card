@@ -17,12 +17,6 @@
           </th>
           <th
             scope="col"
-            class="hidden px-4 py-3 text-left text-xs font-semibold tracking-wide text-gray-600 [html.dark_&]:text-gray-300 md:table-cell"
-          >
-            Known
-          </th>
-          <th
-            scope="col"
             class="px-4 py-3 text-left text-xs font-semibold tracking-wide text-gray-600 [html.dark_&]:text-gray-300"
           >
             Action
@@ -36,7 +30,7 @@
         @if (listWord().length === 0) {
           <tr>
             <td
-              colspan="4"
+              colspan="3"
               class="px-4 py-6 text-center text-sm text-gray-500 [html.dark_&]:text-gray-400"
             >
               No words available.
@@ -51,33 +45,38 @@
               <td class="px-4 py-3 text-sm text-gray-700 [html.dark_&]:text-gray-300">
                 {{ word.meaning }}
               </td>
-              <td class="hidden px-4 py-3 text-sm md:table-cell">
-                <span
-                  class="inline-flex rounded-full px-2 py-1 text-xs font-semibold"
-                  [class.bg-green-100]="word.isKnown"
-                  [class.text-green-700]="word.isKnown"
-                  [class.bg-gray-100]="!word.isKnown"
-                  [class.text-gray-700]="!word.isKnown"
-                >
-                  {{ word.isKnown ? 'Yes' : 'No' }}
-                </span>
-              </td>
               <td class="px-4 py-3 text-sm">
                 <div class="flex items-center gap-2">
                   <button
                     type="button"
-                    class="rounded bg-blue-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                    class="inline-flex h-8 w-8 items-center justify-center rounded bg-blue-600 text-white hover:bg-blue-700"
                     (click)="handleEdit(word)"
+                    aria-label="Edit word"
                   >
-                    Edit
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L12 16l-4 1 1-4 9.586-9.586z"
+                      />
+                    </svg>
                   </button>
 
                   <button
                     type="button"
-                    class="rounded bg-red-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-red-700"
+                    class="inline-flex h-8 w-8 items-center justify-center rounded bg-red-600 text-white hover:bg-red-700"
                     (click)="handleDelete(word)"
+                    aria-label="Delete word"
                   >
-                    Delete
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-7 0h8"
+                      />
+                    </svg>
                   </button>
                 </div>
               </td>

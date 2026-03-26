@@ -3,3 +3,9 @@ export enum STUDY_PHASE {
   STUDY,
   PRACTICE,
 }
+
+export enum DIFFICULTY {
+  EASY,
+  MEDIUM,
+  HARD,
+}

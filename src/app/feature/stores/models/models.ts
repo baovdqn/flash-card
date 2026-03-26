@@ -18,7 +18,8 @@ export interface FlashCard {
   example: string;
   pronunciation: string;
   imageUrl: string;
-  isKnown: boolean;
+  interval?: number;
+  repetitionCount?: number;
   createdAt?: string;
   updatedAt?: string;
 }

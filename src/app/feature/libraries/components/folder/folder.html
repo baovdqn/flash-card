@@ -1,53 +1,86 @@
 @switch (studyPhase()) {
   @case (STUDY_PHASE.OVERVIEW) {
     <section class="mx-auto w-full max-w-5xl">
-      <div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+      <div class="mb-2">
         <h2
           id="folders-heading"
-          class="text-xl font-semibold text-gray-900 [html.dark_&]:text-gray-100"
+          class="text-xl font-semibold text-gray-900 mb-1 [html.dark_&]:text-gray-100"
         >
           {{ folderSelected()?.name }}
         </h2>
+        <p class="text-sm italic text-gray-600 [html.dark_&]:text-gray-400">
+          {{ folderSelected()?.description }}
+        </p>
       </div>
       <div class="flex gap-2 justify-end mb-4">
-        <button
-          type="button"
-          class="inline-flex cursor-pointer items-center gap-2 rounded-md bg-blue-600 px-4 py-1 text-sm font-medium text-white hover:bg-blue-700 [html.dark_&]:bg-blue-700 [html.dark_&]:hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400 [html.dark_&]:disabled:bg-gray-600 [html.dark_&]:disabled:hover:bg-gray-600"
-          (click)="handleStudy()"
-          [disabled]="!flashCardsOfSelectedFolder() || flashCardsOfSelectedFolder().length === 0"
-        >
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 4v16m8-8H4"
-            />
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"
-            />
-          </svg>
-          Study
-        </button>
-        <button
-          type="button"
-          class="inline-flex cursor-pointer items-center gap-2 rounded-md bg-green-600 px-4 py-1 text-sm font-medium text-white hover:bg-green-700 [html.dark_&]:bg-green-700 [html.dark_&]:hover:bg-green-600"
-          (click)="handleCreate()"
-        >
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          Create
-        </button>
+        @if (flashCardsOfSelectedFolder() && flashCardsOfSelectedFolder().length > 0) {
+          <button
+            type="button"
+            class="cursor-pointer items-center rounded-md bg-purple-600 px-4 py-1 text-sm font-medium text-white hover:bg-purple-700 [html.dark_&]:bg-purple-700 [html.dark_&]:hover:bg-purple-600"
+            (click)="handlePractice()"
+          >
+            Practice
+          </button>
+          <button
+            type="button"
+            class="cursor-pointer items-center rounded-md bg-blue-600 px-4 py-1 text-sm font-medium text-white hover:bg-blue-700 [html.dark_&]:bg-blue-700 [html.dark_&]:hover:bg-blue-600"
+            (click)="handleStudy()"
+          >
+            Study
+          </button>
+        }
+
+        <div class="relative kebab-menu-container">
+          <button
+            type="button"
+            class="inline-flex cursor-pointer items-center justify-center rounded-md border border-violet-200 bg-violet-50 p-2 text-violet-700 hover:bg-violet-100 [html.dark_&]:border-violet-700 [html.dark_&]:bg-violet-900/30 [html.dark_&]:text-violet-300 [html.dark_&]:hover:bg-violet-900/50"
+            (click)="openKebabMenu()"
+            aria-label="More options"
+          >
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 8c1.1 0 2-1.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+              />
+            </svg>
+          </button>
+
+          @if (isKebabMenuOpen()) {
+            <div
+              class="absolute right-0 top-full z-20 mt-2 w-44 overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg [html.dark_&]:border-gray-700 [html.dark_&]:bg-gray-900"
+            >
+              <button
+                type="button"
+                class="block w-full px-3 py-2 text-left text-sm font-medium text-blue-700 hover:bg-blue-50 [html.dark_&]:text-blue-300 [html.dark_&]:hover:bg-blue-900/30"
+                (click)="openImportModal()"
+              >
+                Import Excel
+              </button>
+              <button
+                type="button"
+                class="block w-full px-3 py-2 text-left text-sm font-medium text-blue-700 hover:bg-blue-50 [html.dark_&]:text-blue-300 [html.dark_&]:hover:bg-blue-900/30"
+                (click)="handleCreate()"
+              >
+                Create Word
+              </button>
+              <button
+                type="button"
+                class="block w-full px-3 py-2 text-left text-sm font-medium text-blue-700 hover:bg-blue-50 [html.dark_&]:text-blue-300 [html.dark_&]:hover:bg-blue-900/30"
+                (click)="openEditFolderModal()"
+              >
+                Edit folder
+              </button>
+              <button
+                type="button"
+                class="block w-full px-3 py-2 text-left text-sm font-medium text-red-700 hover:bg-red-50 [html.dark_&]:text-red-300 [html.dark_&]:hover:bg-red-900/30"
+                (click)="handleDeleteFolder()"
+              >
+                Delete folder
+              </button>
+            </div>
+          }
+        </div>
       </div>
+
       <app-word-list
         [listWord]="flashCardsOfSelectedFolder()"
         (editWord)="handleEdit($event)"
@@ -56,138 +89,281 @@
     </section>
   }
   @case (STUDY_PHASE.STUDY) {
-    <app-flashcard></app-flashcard>
+    <button
+      class="mb-4 w-full rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 [html.dark_&]:bg-gray-700 [html.dark_&]:text-gray-300 [html.dark_&]:hover:bg-gray-600"
+      (click)="store.setStudyPhase(STUDY_PHASE.OVERVIEW)"
+    >
+      Back to overview
+    </button>
+    @for (flashcard of folderSelected()?.flashCards; track $index) {
+      <app-card [card]="flashcard"></app-card>
+    }
   }
   @case (STUDY_PHASE.PRACTICE) {
-    PRACTICE
+    <button
+      class="mb-4 w-full rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 [html.dark_&]:bg-gray-700 [html.dark_&]:text-gray-300 [html.dark_&]:hover:bg-gray-600"
+      (click)="store.setStudyPhase(STUDY_PHASE.OVERVIEW)"
+    >
+      Back to overview
+    </button>
+    <app-flashcard></app-flashcard>
   }
 }
 
-@if (isCreateWordModalOpen()) {
+@if (isCreateWordModalOpen() || isEditFolderModalOpen()) {
   <app-modal>
     <ng-container modal-head>
       <h3 class="text-lg font-semibold text-gray-900 [html.dark_&]:text-gray-100">
-        {{ isEditingWord() ? 'Edit Word' : 'Create Word' }}
+        @switch (true) {
+          @case (isEditFolderModalOpen()) {
+            Edit Folder
+          }
+          @case (isEditingWord()) {
+            Edit Word
+          }
+          @default {
+            Create Word
+          }
+        }
       </h3>
     </ng-container>
 
     <ng-container modal-content>
-      <div class="grid gap-3 sm:grid-cols-2">
-        <div>
-          <label
-            for="word-name"
-            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
-          >
-            Word *
-          </label>
-          <input
-            id="word-name"
-            type="text"
-            placeholder="Enter word"
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
-            [class.!border-red-500]="
-              formCreateWord.name().invalid() && formCreateWord.name().touched()
-            "
-            [formField]="formCreateWord.name"
-          />
-          @if (formCreateWord.name().invalid() && formCreateWord.name().touched()) {
-            <p class="mt-1 text-xs text-red-500">Word is required.</p>
-          }
-        </div>
+      @if (isCreateWordModalOpen()) {
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label
+              for="word-name"
+              class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+            >
+              Word *
+            </label>
+            <input
+              id="word-name"
+              type="text"
+              placeholder="Enter word"
+              class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+              [class.!border-red-500]="
+                formCreateWord.name().invalid() && formCreateWord.name().touched()
+              "
+              [formField]="formCreateWord.name"
+            />
+            @if (formCreateWord.name().invalid() && formCreateWord.name().touched()) {
+              <p class="mt-1 text-xs text-red-500">Word is required.</p>
+            }
+          </div>
 
-        <div>
-          <label
-            for="word-meaning"
-            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
-          >
-            Meaning *
-          </label>
-          <input
-            id="word-meaning"
-            type="text"
-            placeholder="Enter meaning"
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
-            [class.!border-red-500]="
-              formCreateWord.meaning().invalid() && formCreateWord.meaning().touched()
-            "
-            [formField]="formCreateWord.meaning"
-          />
-          @if (formCreateWord.meaning().invalid() && formCreateWord.meaning().touched()) {
-            <p class="mt-1 text-xs text-red-500">Meaning is required.</p>
-          }
-        </div>
+          <div>
+            <label
+              for="word-meaning"
+              class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+            >
+              Meaning *
+            </label>
+            <input
+              id="word-meaning"
+              type="text"
+              placeholder="Enter meaning"
+              class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+              [class.!border-red-500]="
+                formCreateWord.meaning().invalid() && formCreateWord.meaning().touched()
+              "
+              [formField]="formCreateWord.meaning"
+            />
+            @if (formCreateWord.meaning().invalid() && formCreateWord.meaning().touched()) {
+              <p class="mt-1 text-xs text-red-500">Meaning is required.</p>
+            }
+          </div>
 
-        <div>
-          <label
-            for="word-phonetic"
-            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
-          >
-            Phonetic
-          </label>
-          <input
-            id="word-phonetic"
-            type="text"
-            placeholder="/fəˈnɛtɪk/"
-            [formField]="formCreateWord.phonetic"
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
-            [class.!border-red-500]="
-              formCreateWord.phonetic().invalid() && formCreateWord.phonetic().touched()
-            "
-          />
-        </div>
+          <div>
+            <label
+              for="word-phonetic"
+              class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+            >
+              Phonetic
+            </label>
+            <input
+              id="word-phonetic"
+              type="text"
+              placeholder="/fəˈnɛtɪk/"
+              [formField]="formCreateWord.phonetic"
+              class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+              [class.!border-red-500]="
+                formCreateWord.phonetic().invalid() && formCreateWord.phonetic().touched()
+              "
+            />
+          </div>
 
-        <div>
-          <label
-            for="word-type"
-            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
-          >
-            Type
-          </label>
-          <input
-            id="word-type"
-            type="text"
-            placeholder="noun, verb..."
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
-            [formField]="formCreateWord.type"
-          />
-        </div>
+          <div>
+            <label
+              for="word-type"
+              class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+            >
+              Type
+            </label>
+            <input
+              id="word-type"
+              type="text"
+              placeholder="noun, verb..."
+              class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+              [formField]="formCreateWord.type"
+            />
+          </div>
 
-        <div class="sm:col-span-2">
-          <label
-            for="word-example"
-            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
-          >
-            Example
-          </label>
-          <textarea
-            id="word-example"
-            rows="3"
-            placeholder="Enter example sentence"
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
-            [formField]="formCreateWord.example"
-          ></textarea>
-        </div>
+          <div class="sm:col-span-2">
+            <label
+              for="word-example"
+              class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+            >
+              Example
+            </label>
+            <textarea
+              id="word-example"
+              rows="3"
+              placeholder="Enter example sentence"
+              class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+              [formField]="formCreateWord.example"
+            ></textarea>
+          </div>
 
-        <div class="sm:col-span-2">
-          <label
-            for="word-image"
-            class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
-          >
-            Image URL
-          </label>
-          <input
-            id="word-image"
-            type="url"
-            placeholder="https://..."
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
-            [formField]="formCreateWord.imageUrl"
-          />
+          <div class="sm:col-span-2">
+            <label
+              for="word-image"
+              class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+            >
+              Image URL
+            </label>
+            <input
+              id="word-image"
+              type="url"
+              placeholder="https://..."
+              class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+              [formField]="formCreateWord.imageUrl"
+            />
+          </div>
         </div>
+      }
 
-        <label class="sm:col-span-2 inline-flex items-center gap-2 text-sm text-gray-700">
-          <input type="checkbox" class="h-4 w-4" [formField]="formCreateWord.isKnown" />
-          Mark as known
-        </label>
+      @if (isEditFolderModalOpen()) {
+        <div class="space-y-3">
+          <div>
+            <label
+              for="folder-name"
+              class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+            >
+              Name *
+            </label>
+            <input
+              id="folder-name"
+              type="text"
+              placeholder="Enter folder name"
+              class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+              [class.!border-red-500]="
+                formEditFolder.name().invalid() && formEditFolder.name().touched()
+              "
+              [formField]="formEditFolder.name"
+            />
+            @if (formEditFolder.name().invalid() && formEditFolder.name().touched()) {
+              <p class="mt-1 text-xs text-red-500">Folder name is required.</p>
+            }
+          </div>
+
+          <div>
+            <label
+              for="folder-description"
+              class="mb-1 block text-sm font-medium text-gray-700 [html.dark_&]:text-gray-200"
+            >
+              Description
+            </label>
+            <textarea
+              id="folder-description"
+              rows="3"
+              placeholder="Enter folder description"
+              class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [html.dark_&]:border-gray-600 [html.dark_&]:bg-gray-800 [html.dark_&]:text-gray-100"
+              [formField]="formEditFolder.description"
+            ></textarea>
+          </div>
+        </div>
+      }
+    </ng-container>
+
+    <ng-container modal-footer>
+      <button
+        type="button"
+        class="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 [html.dark_&]:border-gray-600 [html.dark_&]:text-gray-200 [html.dark_&]:hover:bg-gray-800"
+        (click)="isEditFolderModalOpen() ? closeEditFolderModal() : closeCreateWordModal()"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        [class]="
+          isEditFolderModalOpen()
+            ? 'bg-blue-600 hover:bg-blue-700'
+            : 'bg-green-600 hover:bg-green-700'
+        "
+        class="rounded px-3 py-1.5 text-sm font-medium text-white"
+        (click)="isEditFolderModalOpen() ? submitEditFolder() : submitCreateWord()"
+      >
+        @if (isEditFolderModalOpen()) {
+          Save
+        } @else {
+          {{ isEditingWord() ? 'Save' : 'Create' }}
+        }
+      </button>
+    </ng-container>
+  </app-modal>
+}
+
+@if (isImportModalOpen()) {
+  <app-modal>
+    <ng-container modal-head>
+      <div class="flex items-center justify-between gap-3">
+        <h3 class="text-lg font-semibold text-gray-900 [html.dark_&]:text-gray-100">
+          Import Excel
+        </h3>
+        <button
+          type="button"
+          class="rounded border border-emerald-600 px-3 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50 [html.dark_&]:border-emerald-500 [html.dark_&]:text-emerald-400 [html.dark_&]:hover:bg-emerald-900/30"
+          (click)="downloadImportTemplate()"
+        >
+          Download template excel
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container modal-content>
+      <div
+        class="rounded-lg border border-dashed border-gray-300 p-6 text-center [html.dark_&]:border-gray-600"
+        (dragover)="onImportDragOver($event)"
+        (drop)="onImportFileDrop($event)"
+      >
+        <p class="mb-2 text-sm text-gray-700 [html.dark_&]:text-gray-200">
+          Drag and drop Excel file here
+        </p>
+        <p class="mb-4 text-xs text-gray-500 [html.dark_&]:text-gray-400">Accepted: .xlsx, .xls</p>
+
+        <button
+          type="button"
+          class="rounded bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
+          (click)="importFileInput.click()"
+        >
+          Choose file
+        </button>
+        <input
+          #importFileInput
+          type="file"
+          class="hidden"
+          accept=".xlsx,.xls"
+          (change)="onImportFileChange($event)"
+        />
+
+        @if (importFile()) {
+          <p class="mt-4 text-sm font-medium text-gray-800 [html.dark_&]:text-gray-100">
+            Selected: {{ importFile()?.name }}
+          </p>
+        }
       </div>
     </ng-container>
 
@@ -195,17 +371,18 @@
       <button
         type="button"
         class="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 [html.dark_&]:border-gray-600 [html.dark_&]:text-gray-200 [html.dark_&]:hover:bg-gray-800"
-        (click)="closeCreateWordModal()"
+        (click)="closeImportModal()"
       >
-        Cancel
+        Close
       </button>
 
       <button
         type="button"
-        class="rounded bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700"
-        (click)="submitCreateWord()"
+        class="rounded bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+        [disabled]="!importFile()"
+        (click)="submitImportExcel()"
       >
-        {{ isEditingWord() ? 'Save' : 'Create' }}
+        Import
       </button>
     </ng-container>
   </app-modal>

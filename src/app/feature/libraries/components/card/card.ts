@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 import { FlashCard } from '../../../stores/models';
+import { BaseComponent } from '../base.component';
 
 @Component({
   selector: 'app-card',
